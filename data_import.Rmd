@@ -41,7 +41,15 @@ skimr::skim(litters_df)
 
 check out `?read_csv()` for more information.
 ```{r}
-litters_df = read_csv("./data/FAS_litters.csv", skip = 10, col_names = FALSE)
+litters_df = read_csv("./data/FAS_litters.csv", na = c("NA", ".", ""), skip = 10, col_names = FALSE)
+```
+
+## Import Pups data
+```{r}
+pups_df = read_csv("./data/FAS_pups.csv", na = c("NA", ".", ""), skip = 3)
+
+pups_df =
+  janitor:: clean_names(pups_df)
 ```
 
 ## Other file formats

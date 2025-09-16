@@ -137,17 +137,37 @@ Data summary
 check out `?read_csv()` for more information.
 
 ``` r
-litters_df = read_csv("./data/FAS_litters.csv", skip = 10, col_names = FALSE)
+litters_df = read_csv("./data/FAS_litters.csv", na = c("NA", ".", ""), skip = 10, col_names = FALSE)
 ```
 
     ## Rows: 40 Columns: 8
     ## ── Column specification ────────────────────────────────────────────────────────
     ## Delimiter: ","
-    ## chr (4): X1, X2, X3, X4
-    ## dbl (4): X5, X6, X7, X8
+    ## chr (2): X1, X2
+    ## dbl (6): X3, X4, X5, X6, X7, X8
     ## 
     ## ℹ Use `spec()` to retrieve the full column specification for this data.
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+## Import Pups data
+
+``` r
+pups_df = read_csv("./data/FAS_pups.csv", na = c("NA", ".", ""), skip = 3)
+```
+
+    ## Rows: 313 Columns: 6
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (1): Litter Number
+    ## dbl (5): Sex, PD ears, PD eyes, PD pivot, PD walk
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+pups_df =
+  janitor:: clean_names(pups_df)
+```
 
 ## Other file formats
 
