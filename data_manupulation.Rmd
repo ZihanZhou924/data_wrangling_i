@@ -112,6 +112,19 @@ filter(litters_df, group == "Mod8")
 filter(litters_df, group %in% c("Con7", "Mod8"))
 ```
 
+filter out missing
+```{r}
+drop_na(litters_df)
+drop_na(litters_df, gd0_weight)
+```
+
+class assessment
+
+```{r}
+filter(pups_df, sex == 1)
+filter(pups_df, pd_walk < 11, sex == 2)
+```
+
 ## `mutate`
 
 ```{r}
