@@ -49,7 +49,7 @@ litters_df = read_csv("./data/FAS_litters.csv", na = c("NA", ".", ""), skip = 10
 pups_df = read_csv("./data/FAS_pups.csv", na = c("NA", ".", ""), skip = 3)
 
 pups_df =
-  janitor:: clean_names(pups_df)
+  janitor :: clean_names(pups_df)
 ```
 
 ## Other file formats
