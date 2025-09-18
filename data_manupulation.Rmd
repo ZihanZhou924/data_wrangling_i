@@ -1,5 +1,5 @@
 ---
-title: "Data Import"
+title: "Data Manipulation"
 output: github_document
 ---
 
@@ -10,21 +10,33 @@ library(tidyverse)
 ## load in the FAS Litters Data
 
 ```{r}
-litters_df = read_csv("./data/FAS_litters.csv")
-litters_df = janitor::clean_names(litters_df)
+litters_df = 
+  read_csv("./data/FAS_litters.csv", na = c("NA", ".", ""))
+litters_df = 
+  janitor::clean_names(litters_df)
+
+pups_df =
+  read_csv("data/FAS_pups.csv", skip = 3, na = c("NA", ".", ""))
+pups_df = 
+  janitor::clean_names(pups_df)
 ```
 
 ## `select`
 
 Choose some columns and not others.
 
+select 
 ```{r}
-select(litters_df, group, litter_number)
+select(litters_df, group, litter_number, gd0_weight)
 ```
+
+select a range
 
 ```{r}
 select(litters_df, group, gd0_weight:gd_of_birth)
 ```
+
+select by removal
 
 ```{r}
 select(litters_df, -litter_number)
@@ -33,17 +45,23 @@ select(litters_df, -litter_number)
 Renaming columns ...
 
 ```{r}
-select(litters_df, GROUP = group, LITTer_NUmBer = litter_number)
+select(litters_df, GROUP = group, everything())
 ```
 
 ```{r}
-rename(litters_df, GROUP = group, LITTer_NUmBer = litter_number)
+rename(litters_df, GROUP = group)
 ```
 
-Select helpers
+Select by prefix
 
 ```{r}
-select(litters_df, starts_with("gd"))
+select(litters_df, group, starts_with("gd"))
+```
+
+rearrange by selecting
+
+```{r}
+select(litters_df, starts_with("gd"), group)
 ```
 
 ```{r}
@@ -52,6 +70,20 @@ select(litters_df, litter_number, everything())
 
 ```{r}
 relocate(litters_df, litter_number)
+```
+
+what if i only select one variable ...?
+
+```{r}
+select(litters_df,group)
+pull(litters_df, group)
+litters_df$group
+```
+
+## assessment
+
+```{r}
+select(pups_df, litter_number, sex, pd_ears)
 ```
 
 ## `filter`
@@ -79,3 +111,42 @@ filter(litters_df, group == "Mod8")
 ```{r}
 filter(litters_df, group %in% c("Con7", "Mod8"))
 ```
+
+## `mutate`
+
+```{r}
+mutate(
+  litters_df, 
+  wt_gain = gd18_weight - gd0_weight,
+  group = str_to_lower(group))
+```
+
+
+## `arrange`
+
+```{r}
+arrange(litters_df, pups_born_alive)
+```
+
+
+## `%>%`
+
+```{r}
+litters_data_row = read_csv("./data/FAS_litters.csv", na = c("NA", ".", ""))
+litters_clean_name = janitor::clean_names(litters_data_row)
+litters_data_selected = select(litters_clean_name, -pups_survive)
+litters_mutated = mutate(litters_data_selected, wt_gain = gd18_weight - gd0_weight)
+litters_without_missing = drop_na(litters_mutated, gd0_weight)
+```
+
+USE THE PIPE OPERATOR INSTEAD
+
+```{r}
+litters_df = 
+  read_csv("./data/FAS_litters.csv", na = c("NA", ".", "")) %>%
+  janitor::clean_names() %>%
+  select(-pups_survive) %>%
+  mutate(wt_gain = gd18_weight - gd0_weight) %>%
+  drop_na(gd0_weight)
+```
+
